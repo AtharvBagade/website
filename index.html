@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Atharv Bagade</title>
+<meta name="description" content="Atharv Bagade: software engineer moving into AI engineering. Still a very curious kid who builds software, chases songs and loses sleep over good books.">
+<meta property="og:title" content="Atharv Bagade">
+<meta property="og:description" content="Still a very curious kid. I build software, chase songs and lose sleep over good books.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="img/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+<!-- Set the theme before first paint: saved choice, else the system setting. -->
+<script>
+  (function () {
+    var saved = null;
+    try { saved = localStorage.getItem('theme'); } catch (e) {}
+    var dark = saved ? saved === 'dark' : !window.matchMedia || window.matchMedia('(prefers-color-scheme: dark)').matches;
+    document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+  })();
+</script>
+
+<!-- Sentient and Chillax are served by Fontshare (ITF Free Font License); the font files are not kept in this repo. -->
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=sentient@400,401,500,501&f[]=chillax@500&display=swap">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="styles.css">
+<script src="main.js" defer></script>
+</head>
+<body>
+<div class="app" data-section="hello">
+
+  <!-- Hello backdrops: blurred photo on larger screens, full photo on phones -->
+  <div class="backdrop backdrop-ambient" aria-hidden="true"></div>
+  <div class="backdrop backdrop-veil" aria-hidden="true"></div>
+  <div class="backdrop backdrop-photo" aria-hidden="true"></div>
+  <div class="backdrop backdrop-shade" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <a class="name" href="#hello">Atharv Bagade</a>
+    <div class="topbar-right">
+      <nav class="top-nav" aria-label="Sections">
+        <a href="#hello">Hello</a>
+        <a href="#experience">Experience</a>
+        <a href="#work">Work</a>
+        <a href="#music">Music</a>
+        <a href="#contact">Stack and contact</a>
+      </nav>
+      <button type="button" class="theme-toggle" aria-label="Switch theme">
+        <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8a4 4 0 1 0 0 8a4 4 0 1 0 0-8M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hello -->
+    <section data-view="hello" class="view view-hello" aria-label="Hello">
+      <figure class="print">
+        <img src="img/hero.jpg" alt="Atharv as a small child, laughing and leaning over a wooden balcony railing" width="1600" height="1199">
+      </figure>
+      <div class="hero">
+        <h1><span class="hero-muted">Still a</span> <em>very curious kid…</em></h1>
+        <p>I build software, chase songs and lose sleep over good books.</p>
+      </div>
+    </section>
+
+    <!-- Experience -->
+    <section data-view="experience" class="view" aria-labelledby="experience-title" hidden>
+      <div class="section-head with-cover">
+        <div class="cover" aria-hidden="true">
+          <svg width="48" height="48" viewBox="0 0 24 24"><path d="M5 7h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2zM8 7V5h8v2"/></svg>
+        </div>
+        <div>
+          <p class="eyebrow">EP · side A</p>
+          <h2 id="experience-title">Experience</h2>
+          <p class="muted">Xook · 2022 to now · 4 tracks</p>
+        </div>
+      </div>
+
+      <ol class="tracks">
+        <li class="track">
+          <span class="track-no">01</span>
+          <div class="track-body">
+            <h3>Software Engineer, Xook</h3>
+            <ul class="bullets">
+              <li>Architected and maintain the Node.js and MongoDB service layer: internal and public APIs, custom CI/CD pipelines and Firebase role-based access control.</li>
+              <li>Built a distributed task scheduler that reliably fires high volumes of time-sensitive HTTP callbacks, with automatic retries and horizontal scaling.</li>
+              <li>Owned a cross-platform React Native logistics app end to end, shipped to iOS and Android, digitising field workflows with product and operations.</li>
+              <li>Improved the Real-Time Visibility Dashboard and the Consumer Commerce app, on both the React front end and backend performance.</li>
+            </ul>
+            <ul class="chips"><li>Node.js</li><li>MongoDB</li><li>React Native</li><li>React</li><li>CI/CD</li><li>Firebase RBAC</li></ul>
+          </div>
+          <span class="track-date">May 2023 – now</span>
+        </li>
+        <li class="track">
+          <span class="track-no">02</span>
+          <div class="track-body">
+            <h3>Software Engineering Intern, Xook</h3>
+            <ul class="bullets">
+              <li>Built the front end of the Consumer Commerce ordering app, tuning client-side performance and state management.</li>
+              <li>Created the Real-Time Visibility Dashboard, a React view of live health and performance metrics for every connected machine, which sped up incident response for the operations team.</li>
+            </ul>
+            <ul class="chips"><li>React</li><li>Data visualisation</li></ul>
+          </div>
+          <span class="track-date">May 2022 – May 2023</span>
+        </li>
+        <li class="track">
+          <span class="track-no">03</span>
+          <div class="track-body">
+            <h3>Master of Computer Applications (MCA)</h3>
+            <p class="muted">Vishwakarma Institute of Technology, Pune</p>
+          </div>
+          <span class="track-date">May 2023</span>
+        </li>
+        <li class="track">
+          <span class="track-no">04</span>
+          <div class="track-body">
+            <h3>Bachelor of Computer Applications (BCA)</h3>
+            <p class="muted">Modern College of Arts, Science and Commerce, Pune</p>
+          </div>
+          <span class="track-date">July 2021</span>
+        </li>
+      </ol>
+    </section>
+
+    <!-- Work: cards are rendered from data/projects.json -->
+    <section data-view="work" class="view" aria-labelledby="work-title" hidden>
+      <div class="section-head split">
+        <div>
+          <p class="eyebrow">personal projects</p>
+          <h2 id="work-title">Work</h2>
+        </div>
+        <div class="tabs" role="tablist" aria-label="Project status" data-tabs="work">
+          <button type="button" role="tab" data-key="progress">In progress <span class="count"></span></button>
+          <button type="button" role="tab" data-key="upcoming">Upcoming <span class="count"></span></button>
+          <button type="button" role="tab" data-key="built">Built <span class="count"></span></button>
+        </div>
+      </div>
+      <div class="cards" id="work-list" role="tabpanel"></div>
+    </section>
+
+    <!-- Music: lists are rendered from data/music.json -->
+    <section data-view="music" class="view" aria-labelledby="music-title" hidden>
+      <div class="section-head music-head">
+        <div class="placeholder music-photo">[PHOTO OF YOU PLAYING]</div>
+        <div>
+          <p class="eyebrow">side B</p>
+          <h2 id="music-title">Music</h2>
+          <p class="lead">I play tabla, piano, harmonium and guitar, and I spend a lot of time curating what I listen to.</p>
+        </div>
+      </div>
+      <div class="tabs-row">
+        <div class="tabs" role="tablist" aria-label="Music" data-tabs="music">
+          <button type="button" role="tab" data-key="recommendations">Recommendations</button>
+          <button type="button" role="tab" data-key="current">Currently listening to</button>
+          <button type="button" role="tab" data-key="allTime">All-time artists</button>
+        </div>
+        <p class="eyebrow" id="music-note"></p>
+      </div>
+      <div id="music-list" role="tabpanel"></div>
+    </section>
+
+    <!-- Stack and contact -->
+    <section data-view="contact" class="view" aria-labelledby="contact-title" hidden>
+      <div class="section-head">
+        <p class="eyebrow">credits</p>
+        <h2 id="contact-title">Stack and contact</h2>
+      </div>
+      <div class="contact-grid">
+        <dl class="stack">
+          <div><dt>languages</dt><dd>JavaScript, TypeScript, Python, SQL, Go (learning)</dd></div>
+          <div><dt>backend</dt><dd>Node.js, NestJS, Express, MongoDB, REST APIs, microservices, OAuth 2.0</dd></div>
+          <div><dt>web and mobile</dt><dd>React, React Native, Expo</dd></div>
+          <div><dt>IoT</dt><dd>IoT orchestration, MQTT</dd></div>
+          <div><dt>infrastructure</dt><dd>Docker, CI/CD (GitHub Actions), Firebase, Linux, system design</dd></div>
+          <div><dt>AI engineering</dt><dd>Agents (LangGraph), evals, context engineering, MCP, RAG, multi-provider LLMs, local models</dd></div>
+        </dl>
+        <ul class="contact-links">
+          <li><a href="https://github.com/AtharvBagade">
+            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6l-6 6 6 6M16 6l6 6-6 6"/></svg>github.com/AtharvBagade</a></li>
+          <li><a href="mailto:atharvbagade8920@gmail.com">
+            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2zM3 7l9 6 9-6"/></svg>atharvbagade8920@gmail.com</a></li>
+          <!-- TODO: add LinkedIn once the URL is known -->
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <!-- Phone: bottom tab bar -->
+  <nav class="tabbar" aria-label="Sections">
+    <a href="#hello"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Hello</a>
+    <a href="#experience"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2zM8 7V5h8v2"/></svg>Experience</a>
+    <a href="#work"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6l-6 6 6 6M16 6l6 6-6 6"/></svg>Work</a>
+    <a href="#music"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l11-2v13M6 15a3 3 0 1 0 0 6a3 3 0 1 0 0-6M17 13a3 3 0 1 0 0 6a3 3 0 1 0 0-6"/></svg>Music</a>
+    <a href="#contact"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2zM3 7l9 6 9-6"/></svg>Contact</a>
+  </nav>
+</div>
+</body>
+</html>
