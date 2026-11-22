@@ -1,0 +1,27 @@
+{
+  "recommendations": [
+    { "title": "[SONG TITLE]", "artist": "[ARTIST]", "why": "[One line on why you love it]", "spotifyTrackId": "" },
+    { "title": "[SONG TITLE]", "artist": "[ARTIST]", "why": "[One line on why you love it]", "spotifyTrackId": "" },
+    { "title": "[SONG TITLE]", "artist": "[ARTIST]", "why": "[One line on why you love it]", "spotifyTrackId": "" }
+  ],
+  "current": [
+    { "name": "gini", "spotifyArtistId": "2sjFmfxifbUo2A25xuQOp0" },
+    { "name": "Anumita Nadesan", "spotifyArtistId": "1nmKYy6efdYl8sIcT0gCLJ" },
+    { "name": "Twinkle Aggrwal", "spotifyArtistId": "6IFzEP3X3Iunldjoh3PnLG" },
+    { "name": "Anand Bhaskar Collective", "spotifyArtistId": "45m11y8OUyx5EgHiKvEC3c" },
+    { "name": "Janisht Joshi", "spotifyArtistId": "0lxFJDXOwwxbYpo0EnA51Z" }
+  ],
+  "allTime": [
+    { "name": "Pritam", "spotifyArtistId": "1wRPtKGflJrBx9BmLsSwlU" },
+    { "name": "When Chai Met Toast", "spotifyArtistId": "04hYGGSjYtLekuuJXEGrIl" },
+    { "name": "The Local Train", "spotifyArtistId": "7b6Ui7JVaBDEfZB9k6nHL0" },
+    { "name": "The Yellow Diary", "spotifyArtistId": "6xlrAAgxcRlgCXnbg2hcFc" },
+    { "name": "Prateek Kuhad", "spotifyArtistId": "0tC995Rfn9k2l7nqgCZsV7" },
+    { "name": "A.R. Rahman", "spotifyArtistId": "1mYsTxnqsietFxj1OgoGbG" },
+    { "name": "Taylor Swift", "spotifyArtistId": "06HL4z0CvFAxyc27GXpf02" },
+    { "name": "Lata Mangeshkar", "spotifyArtistId": "61JrslREXq98hurYL2hYoc" },
+    { "name": "Anumita Nadesan", "spotifyArtistId": "1nmKYy6efdYl8sIcT0gCLJ" },
+    { "name": "Raghu Dixit", "spotifyArtistId": "72578usTM6Cj5qWsi471Nc" },
+    { "name": "One Direction", "spotifyArtistId": "4AK6F7OLvEQ5QYCBNiQWHq" }
+  ]
+}

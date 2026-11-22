@@ -1,0 +1,47 @@
+[
+  {
+    "status": "progress",
+    "tag": "Python · in progress",
+    "icon": "code",
+    "title": "changesRequested",
+    "body": "A Python code-review CLI, run as chreq. RAG retrieves codebase context and a LangGraph agent reviews the change. The model comes from config: Claude, Gemini or a local ~30B model, compared in evals.",
+    "stack": ["Python", "RAG", "LangGraph", "evals"],
+    "url": "https://github.com/AtharvBagade/changesRequested"
+  },
+  {
+    "status": "progress",
+    "tag": "automation · in progress",
+    "icon": "work",
+    "title": "Job search platform",
+    "body": "Finds well-paying companies, matches my résumé to job descriptions and prepares applications.",
+    "stack": [],
+    "url": ""
+  },
+  {
+    "status": "upcoming",
+    "tag": "Go · upcoming",
+    "icon": "code",
+    "title": "Job queue from scratch",
+    "body": "A job queue with a worker pool, built from first principles to learn Go concurrency.",
+    "stack": ["Go", "concurrency"],
+    "url": "https://github.com/AtharvBagade/jobqueue"
+  },
+  {
+    "status": "built",
+    "tag": "MCP · built",
+    "icon": "music",
+    "title": "Spotify MCP server",
+    "body": "Open-source MCP server that exposes the Spotify Web API to AI agents like Claude Desktop and Cursor. OAuth 2.0 PKCE with automatic token refresh, connection-pooled clients and a pytest suite.",
+    "stack": ["Python", "MCP", "OAuth 2.0", "pytest"],
+    "url": "https://github.com/AtharvBagade/auxcord-mcp"
+  },
+  {
+    "status": "built",
+    "tag": "Go · built",
+    "icon": "code",
+    "title": "ndstats",
+    "body": "A Go command-line tool that computes statistics over NDJSON streams.",
+    "stack": ["Go", "CLI"],
+    "url": "https://github.com/AtharvBagade/ndjson-cli"
+  }
+]
