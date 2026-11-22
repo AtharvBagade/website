@@ -158,11 +158,18 @@ main { position: relative; z-index: 1; flex: 1 1 0; min-height: 0; display: flex
 .hero-muted { color: var(--muted); }
 .hero p { font-family: var(--font-display); font-size: 20px; line-height: 1.5; color: var(--text2); }
 .print {
+  /* --print-centre places the print; the entrance animation reuses it so the two never fight. */
+  --print-centre: translateY(-50%);
   position: absolute; right: 7%; top: 50%; width: min(40%, 560px); margin: 0;
-  transform: translateY(-50%) rotate(2deg);
+  transform: var(--print-centre) rotate(2deg);
   background: #F4F1EA; padding: 14px 14px 54px;
   box-shadow: 0 24px 50px rgba(0, 0, 0, .35), 0 2px 6px rgba(0, 0, 0, .2);
-  animation: view-in .5s ease;
+  animation: print-in .6s ease;
+}
+/* Its own keyframes: the shared view-in would replace the centring and tilt while it runs, then snap at the end. */
+@keyframes print-in {
+  from { opacity: 0; transform: var(--print-centre) translateY(16px) rotate(4deg); }
+  to { opacity: 1; transform: var(--print-centre) rotate(2deg); }
 }
 .print img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; object-position: 55% 30%; }
 
@@ -260,6 +267,17 @@ main { position: relative; z-index: 1; flex: 1 1 0; min-height: 0; display: flex
   .hero { right: 50%; }
   .hero h1 { font-size: 46px; }
   .print { width: min(44%, 460px); }
+}
+
+/* ---------- Portrait tablets: photo centred in the upper part, title full width below ---------- */
+@media (min-width: 721px) and (orientation: portrait) {
+  .print {
+    --print-centre: translate(-50%, -50%);
+    left: 50%; right: auto; top: 40%;
+    width: min(64%, 560px);
+  }
+  .hero { right: var(--pad-x); bottom: 56px; }
+  .hero h1 { font-size: 56px; max-width: 14em; }
 }
 
 /* ---------- Phone ---------- */
