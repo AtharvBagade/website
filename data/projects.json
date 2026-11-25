@@ -9,15 +9,6 @@
     "url": "https://github.com/AtharvBagade/changesRequested"
   },
   {
-    "status": "progress",
-    "tag": "automation · in progress",
-    "icon": "work",
-    "title": "Job search platform",
-    "body": "Finds well-paying companies, matches my résumé to job descriptions and prepares applications.",
-    "stack": [],
-    "url": ""
-  },
-  {
     "status": "upcoming",
     "tag": "Go · upcoming",
     "icon": "code",
