@@ -245,6 +245,7 @@ main { position: relative; z-index: 1; flex: 1 1 0; min-height: 0; display: flex
 .rec-title { font-family: var(--font-display); font-weight: 500; font-size: 22px; line-height: 1.2; }
 .rec-artist { color: var(--text2); font-size: 14px; }
 .rec-why { margin-top: 4px; color: var(--text3); font-family: var(--font-display); font-style: italic; font-size: 15px; }
+.rec-note { color: var(--muted); font-size: 13px; line-height: 1.5; }
 
 /* ---------- Stack and contact ---------- */
 .contact-grid { display: flex; flex-wrap: wrap; gap: 28px 56px; }

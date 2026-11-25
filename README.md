@@ -29,7 +29,7 @@ python3 -m http.server 8000
 ## Editing content
 
 - **Projects:** edit `data/projects.json`. Leave `url` empty to hide the link.
-- **Music:** edit `data/music.json`. Artist links are built from `spotifyArtistId`; a recommendation links to Spotify when `spotifyTrackId` is set.
+- **Music:** edit `data/music.json`. Artist links are built from `spotifyArtistId`; a recommendation links to Spotify when `spotifyTrackId` is set, and an optional `note` adds a small line of context under it.
 - **Experience, stack and contact:** edit `index.html` directly.
 
 ## Deploying
