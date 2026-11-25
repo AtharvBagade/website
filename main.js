@@ -116,7 +116,7 @@ function projectCard(project) {
 
 function setupWork(projects) {
   const list = document.getElementById('work-list');
-  const buttons = setupTabs('work', 'progress', (status) => {
+  const buttons = setupTabs('work', 'built', (status) => {
     list.replaceChildren(...projects.filter((p) => p.status === status).map(projectCard));
   });
   for (const button of buttons) {
