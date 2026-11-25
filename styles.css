@@ -78,11 +78,6 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .eyebrow { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
 .muted { color: var(--muted); }
 .lead { font-family: var(--font-display); font-size: 20px; line-height: 1.35; }
-.placeholder {
-  display: flex; align-items: center; justify-content: center; text-align: center; padding: 8px;
-  border: 1.5px dashed var(--dash); border-radius: 8px; background: var(--hover);
-  font-family: var(--font-mono); font-size: 11px; color: var(--muted);
-}
 
 /* ---------- App shell: fills the screen, never scrolls ---------- */
 .app {
@@ -184,7 +179,7 @@ main { position: relative; z-index: 1; flex: 1 1 0; min-height: 0; display: flex
 }
 .music-head { flex-direction: row; flex-wrap: wrap; align-items: stretch; gap: 20px 32px; }
 .music-head > div:last-child { flex: 1 1 320px; display: flex; flex-direction: column; justify-content: flex-end; gap: 8px; }
-.music-photo { flex: 0 0 200px; height: 150px; }
+.music-photo { flex: 0 0 168px; width: 168px; height: 224px; object-fit: cover; object-position: 40% 40%; border-radius: 8px; }
 
 /* ---------- Experience ---------- */
 .tracks { border-bottom: 1px solid var(--line); }
@@ -245,6 +240,7 @@ main { position: relative; z-index: 1; flex: 1 1 0; min-height: 0; display: flex
 .rec-title { font-family: var(--font-display); font-weight: 500; font-size: 22px; line-height: 1.2; }
 .rec-artist { color: var(--text2); font-size: 14px; }
 .rec-why { margin-top: 4px; color: var(--text3); font-family: var(--font-display); font-style: italic; font-size: 15px; }
+.rec-note { color: var(--muted); font-size: 13px; line-height: 1.5; }
 
 /* ---------- Stack and contact ---------- */
 .contact-grid { display: flex; flex-wrap: wrap; gap: 28px 56px; }

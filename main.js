@@ -142,6 +142,7 @@ function recommendationCard(rec, index) {
     el('span', { className: 'rec-title', text: rec.title }),
     el('span', { className: 'rec-artist', text: rec.artist }),
     el('p', { className: 'rec-why', text: rec.why }),
+    rec.note ? el('p', { className: 'rec-note', text: rec.note }) : null,
   ]);
 }
 

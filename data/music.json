@@ -1,8 +1,8 @@
 {
   "recommendations": [
-    { "title": "[SONG TITLE]", "artist": "[ARTIST]", "why": "[One line on why you love it]", "spotifyTrackId": "" },
-    { "title": "[SONG TITLE]", "artist": "[ARTIST]", "why": "[One line on why you love it]", "spotifyTrackId": "" },
-    { "title": "[SONG TITLE]", "artist": "[ARTIST]", "why": "[One line on why you love it]", "spotifyTrackId": "" }
+    { "title": "Room Jhoom", "artist": "Vidhya Gopal", "why": "A playful, fun spin on a deeply classical song.", "note": "The lyrics come from a kajri, a semi-classical folk form from Uttar Pradesh sung in the monsoon, full of longing for someone far away.", "spotifyTrackId": "7EKep4sDDbo2b0I2F1wojy" },
+    { "title": "Nakkashi", "artist": "Jatra Collective", "why": "Calm and unhurried. For the days you come home tired and listen along over a cup of chai.", "spotifyTrackId": "3gm9psvcWJs3MHhzYqCKwH" },
+    { "title": "Ishaare", "artist": "Anubha Bajaj", "why": "Breezy, Bollywood-flavoured fun. Good vibes to work or study to.", "spotifyTrackId": "0cd2z6Lkm6Syj01l9bdEzq" }
   ],
   "current": [
     { "name": "gini", "spotifyArtistId": "2sjFmfxifbUo2A25xuQOp0" },
