@@ -1,6 +1,6 @@
 # atharvbagade.com
 
-Personal site of Atharv Bagade: one screen, laid out like a music app, doubling as a résumé.
+Personal site of Atharv Bagade: one scrolling page, laid out like a music app, doubling as a résumé.
 
 Plain HTML, CSS and JavaScript. No framework and no build step: this folder is the site.
 
@@ -17,9 +17,9 @@ python3 -m http.server 8000
 
 | Path | What it holds |
 | --- | --- |
-| `index.html` | All markup: top bar, the five sections, the phone tab bar |
+| `index.html` | All markup: top bar and the five sections |
 | `styles.css` | Theme colours (light and dark), layout, tablet and phone breakpoints |
-| `main.js` | Section switching by URL hash, theme toggle, Work and Music tabs, rendering the lists |
+| `main.js` | Highlighting the section in view, theme toggle, Work and Music tabs, rendering the lists |
 | `data/projects.json` | Work cards. `status` is `progress`, `upcoming` or `built` |
 | `data/music.json` | Recommendations, currently listening to, all-time artists (Spotify IDs) |
 | `img/` | The hero photo and the social preview image |

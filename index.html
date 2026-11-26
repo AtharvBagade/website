@@ -32,13 +32,7 @@
 <script src="main.js" defer></script>
 </head>
 <body>
-<div class="app" data-section="hello">
-
-  <!-- Hello backdrops: blurred photo on larger screens, full photo on phones -->
-  <div class="backdrop backdrop-ambient" aria-hidden="true"></div>
-  <div class="backdrop backdrop-veil" aria-hidden="true"></div>
-  <div class="backdrop backdrop-photo" aria-hidden="true"></div>
-  <div class="backdrop backdrop-shade" aria-hidden="true"></div>
+<div class="app at-top" data-section="hello">
 
   <header class="topbar">
     <a class="name" href="#hello">Atharv Bagade</a>
@@ -59,7 +53,12 @@
 
   <main>
     <!-- Hello -->
-    <section data-view="hello" class="view view-hello" aria-label="Hello">
+    <section id="hello" class="page-section hello" aria-label="Hello">
+      <!-- Blurred photo on larger screens, full photo on phones -->
+      <div class="backdrop backdrop-ambient" aria-hidden="true"></div>
+      <div class="backdrop backdrop-veil" aria-hidden="true"></div>
+      <div class="backdrop backdrop-photo" aria-hidden="true"></div>
+      <div class="backdrop backdrop-shade" aria-hidden="true"></div>
       <figure class="print">
         <img src="img/hero.jpg" alt="Atharv as a small child, laughing and leaning over a wooden balcony railing" width="1600" height="1199">
       </figure>
@@ -67,10 +66,12 @@
         <h1><span class="hero-muted">Still a</span> <em>very curious kid…</em></h1>
         <p>I build software, chase songs and lose sleep over good books.</p>
       </div>
+      <a class="scroll-cue" href="#experience">Scroll
+        <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></a>
     </section>
 
     <!-- Experience -->
-    <section data-view="experience" class="view" aria-labelledby="experience-title" hidden>
+    <section id="experience" class="page-section" aria-labelledby="experience-title">
       <div class="section-head with-cover">
         <div class="cover" aria-hidden="true">
           <svg width="48" height="48" viewBox="0 0 24 24"><path d="M5 7h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2zM8 7V5h8v2"/></svg>
@@ -129,7 +130,7 @@
     </section>
 
     <!-- Work: cards are rendered from data/projects.json -->
-    <section data-view="work" class="view" aria-labelledby="work-title" hidden>
+    <section id="work" class="page-section" aria-labelledby="work-title">
       <div class="section-head split">
         <div>
           <p class="eyebrow">personal projects</p>
@@ -145,7 +146,7 @@
     </section>
 
     <!-- Music: lists are rendered from data/music.json -->
-    <section data-view="music" class="view" aria-labelledby="music-title" hidden>
+    <section id="music" class="page-section" aria-labelledby="music-title">
       <div class="section-head music-head">
         <img class="music-photo" src="img/playing.jpg" alt="Atharv sitting cross-legged on the floor, smiling as he plays the tabla" width="661" height="992">
         <div>
@@ -166,7 +167,7 @@
     </section>
 
     <!-- Stack and contact -->
-    <section data-view="contact" class="view" aria-labelledby="contact-title" hidden>
+    <section id="contact" class="page-section" aria-labelledby="contact-title">
       <div class="section-head">
         <p class="eyebrow">credits</p>
         <h2 id="contact-title">Stack and contact</h2>
@@ -192,14 +193,6 @@
     </section>
   </main>
 
-  <!-- Phone: bottom tab bar -->
-  <nav class="tabbar" aria-label="Sections">
-    <a href="#hello"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Hello</a>
-    <a href="#experience"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2zM8 7V5h8v2"/></svg>Experience</a>
-    <a href="#work"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6l-6 6 6 6M16 6l6 6-6 6"/></svg>Work</a>
-    <a href="#music"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l11-2v13M6 15a3 3 0 1 0 0 6a3 3 0 1 0 0-6M17 13a3 3 0 1 0 0 6a3 3 0 1 0 0-6"/></svg>Music</a>
-    <a href="#contact"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2zM3 7l9 6 9-6"/></svg>Contact</a>
-  </nav>
 </div>
 </body>
 </html>

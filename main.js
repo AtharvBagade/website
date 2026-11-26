@@ -1,8 +1,6 @@
 // Atharv Bagade: personal site behaviour.
-// Sections are switched by the URL hash (#work, #music, ...). The sections use data-view, not matching ids,
-// so the browser never scrolls the fixed-height page to jump to them. Work and Music lists come from data/*.json.
-
-const SECTIONS = ['hello', 'experience', 'work', 'music', 'contact'];
+// One scrolling page: the top nav links jump to each section, and the link for the section in view is marked current.
+// Work and Music lists come from data/*.json.
 
 const ICONS = {
   code: 'M8 6l-6 6 6 6M16 6l6 6-6 6',
@@ -18,6 +16,8 @@ const MUSIC_NOTES = {
 };
 
 const app = document.querySelector('.app');
+const sections = [...document.querySelectorAll('.page-section')];
+const navLinks = [...document.querySelectorAll('.top-nav a')];
 
 // ---------- Small DOM helpers ----------
 
@@ -49,18 +49,25 @@ const initials = (name) => name.split(/\s+/).slice(0, 2).map((word) => word[0]).
 
 // ---------- Sections ----------
 
-function showSection() {
-  const requested = location.hash.slice(1);
-  const current = SECTIONS.includes(requested) ? requested : 'hello';
+// The current section is the last one whose top has passed 40% of the way down the screen,
+// or the last section once the page is scrolled to the bottom (Contact is too short to get there).
+function currentSection() {
+  const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+  if (atBottom) return sections[sections.length - 1];
+  const line = window.innerHeight * 0.4;
+  let current = sections[0];
+  for (const section of sections) if (section.getBoundingClientRect().top <= line) current = section;
+  return current;
+}
 
+function updateOnScroll() {
+  // The top bar is see-through only at the very top; once anything scrolls under it, it turns solid.
+  app.classList.toggle('at-top', window.scrollY < 8);
+
+  const current = currentSection().id;
   app.dataset.section = current;
-  for (const view of document.querySelectorAll('.view')) {
-    const active = view.dataset.view === current;
-    view.hidden = !active;
-    if (active) view.scrollTop = 0;
-  }
-  for (const link of document.querySelectorAll('.top-nav a, .tabbar a')) {
-    if (link.getAttribute('href') === `#${current}`) link.setAttribute('aria-current', 'page');
+  for (const link of navLinks) {
+    if (link.getAttribute('href') === `#${current}`) link.setAttribute('aria-current', 'location');
     else link.removeAttribute('aria-current');
   }
 }
@@ -175,8 +182,9 @@ function showLoadError(containerId) {
 
 // ---------- Start ----------
 
-showSection();
-window.addEventListener('hashchange', showSection);
+updateOnScroll();
+window.addEventListener('scroll', updateOnScroll, { passive: true });
+window.addEventListener('resize', updateOnScroll);
 setupThemeToggle();
 
 loadJson('data/projects.json').then(setupWork).catch(() => showLoadError('work-list'));
