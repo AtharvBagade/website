@@ -299,6 +299,9 @@ main { position: relative; z-index: 1; flex: 1 1 0; min-height: 0; display: flex
   .hero-muted { color: rgba(245, 245, 242, .7); }
   .hero h1 em { color: #F5F5F2; }
 
+  /* The tab bar stays dark over the Hello photo, so the theme toggle is hidden there. */
+  .app[data-section="hello"] .theme-toggle { display: none; }
+
   .tabbar {
     position: relative; z-index: 3; flex: 0 0 auto;
     display: flex; justify-content: space-around;
