@@ -1,5 +1,7 @@
 // Atharv Bagade: personal site behaviour.
-// One scrolling page: the top nav links jump to each section, and the link for the section in view is marked current.
+// One scrolling page of full-screen sections: the top nav links jump to each section, and the link for the section
+// in view is marked current. Section content fades up when the section first scrolls into view, and Hello drifts
+// away as you scroll past it (both skipped when the visitor prefers reduced motion).
 // Work and Music lists come from data/*.json.
 
 const ICONS = {
@@ -18,6 +20,11 @@ const MUSIC_NOTES = {
 const app = document.querySelector('.app');
 const sections = [...document.querySelectorAll('.page-section')];
 const navLinks = [...document.querySelectorAll('.top-nav a')];
+const hello = document.getElementById('hello');
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// Items that fade up in each section, in the order they appear. Matches the selector list in styles.css.
+const REVEAL_ITEMS = '.section-head, .tabs-row, .track, .card, .rec, .row, .stack > div, .contact-links li';
 
 // ---------- Small DOM helpers ----------
 
@@ -61,6 +68,12 @@ function currentSection() {
 }
 
 function updateOnScroll() {
+  // Hello parallax: 0 at the top of the page, 1 once Hello has scrolled fully away.
+  if (!reduceMotion) {
+    const progress = Math.min(window.scrollY / hello.offsetHeight, 1);
+    hello.style.setProperty('--p', progress.toFixed(3));
+  }
+
   // The top bar is see-through only at the very top; once anything scrolls under it, it turns solid.
   app.classList.toggle('at-top', window.scrollY < 8);
 
@@ -70,6 +83,30 @@ function updateOnScroll() {
     if (link.getAttribute('href') === `#${current}`) link.setAttribute('aria-current', 'location');
     else link.removeAttribute('aria-current');
   }
+}
+
+// ---------- On-scroll reveal ----------
+
+// Numbers reveal items so they rise one after another, starting at `first`.
+// Lists rendered by a tab start at 2, so they follow the section heading and tabs.
+function setRevealOrder(container, first = 0) {
+  container.querySelectorAll(REVEAL_ITEMS).forEach((item, index) => item.style.setProperty('--i', first + index));
+}
+
+function setupReveal() {
+  if (reduceMotion) return;
+  for (const section of sections) setRevealOrder(section);
+  app.classList.add('reveal-ready');
+
+  // A section is revealed once, when its top comes within the lower fifth of the screen.
+  const observer = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
+      entry.target.classList.add('in-view');
+      observer.unobserve(entry.target);
+    }
+  }, { rootMargin: '0px 0px -20% 0px' });
+  for (const section of sections) observer.observe(section);
 }
 
 // ---------- Theme ----------
@@ -125,6 +162,7 @@ function setupWork(projects) {
   const list = document.getElementById('work-list');
   const buttons = setupTabs('work', 'built', (status) => {
     list.replaceChildren(...projects.filter((p) => p.status === status).map(projectCard));
+    setRevealOrder(list, 2);
   });
   for (const button of buttons) {
     button.querySelector('.count').textContent = projects.filter((p) => p.status === button.dataset.key).length;
@@ -164,6 +202,7 @@ function setupMusic(music) {
       const rows = el('div', { className: key === 'current' ? 'rows single' : 'rows' }, music[key].map(artistRow));
       list.replaceChildren(rows);
     }
+    setRevealOrder(list, 2);
   });
 }
 
@@ -182,6 +221,7 @@ function showLoadError(containerId) {
 
 // ---------- Start ----------
 
+setupReveal();
 updateOnScroll();
 window.addEventListener('scroll', updateOnScroll, { passive: true });
 window.addEventListener('resize', updateOnScroll);
