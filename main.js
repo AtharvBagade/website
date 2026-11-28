@@ -1,8 +1,8 @@
 // Atharv Bagade: personal site behaviour.
-// Sections are switched by the URL hash (#work, #music, ...). The sections use data-view, not matching ids,
-// so the browser never scrolls the fixed-height page to jump to them. Work and Music lists come from data/*.json.
-
-const SECTIONS = ['hello', 'experience', 'work', 'music', 'contact'];
+// One scrolling page of full-screen sections: the top nav links jump to each section, and the link for the section
+// in view is marked current. Section content fades up when the section first scrolls into view, and Hello drifts
+// away as you scroll past it (both skipped when the visitor prefers reduced motion).
+// Project and Music lists come from data/*.json.
 
 const ICONS = {
   code: 'M8 6l-6 6 6 6M16 6l6 6-6 6',
@@ -14,10 +14,21 @@ const ICONS = {
 const MUSIC_NOTES = {
   recommendations: 'songs I think you should hear',
   current: 'on repeat lately',
-  allTime: 'from my Spotify · all time',
+  allTime: 'all time',
 };
 
+// The Spotify tabs are refreshed weekly by the Spotify MCP server listed under Personal projects.
+const SPOTIFY_TABS = ['current', 'allTime'];
+const MCP_SERVER_URL = 'https://github.com/AtharvBagade/auxcord-mcp';
+
 const app = document.querySelector('.app');
+const sections = [...document.querySelectorAll('.page-section')];
+const navLinks = [...document.querySelectorAll('.top-nav a')];
+const hello = document.getElementById('hello');
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// Items that fade up in each section, in the order they appear. Matches the selector list in styles.css.
+const REVEAL_ITEMS = '.section-head, .tabs-row, .entry, .card, .rec, .row, .stack > div, .contact-links li';
 
 // ---------- Small DOM helpers ----------
 
@@ -49,20 +60,57 @@ const initials = (name) => name.split(/\s+/).slice(0, 2).map((word) => word[0]).
 
 // ---------- Sections ----------
 
-function showSection() {
-  const requested = location.hash.slice(1);
-  const current = SECTIONS.includes(requested) ? requested : 'hello';
+// The current section is the last one whose top has passed 40% of the way down the screen,
+// or the last section once the page is scrolled to the bottom (Contact is too short to get there).
+function currentSection() {
+  const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+  if (atBottom) return sections[sections.length - 1];
+  const line = window.innerHeight * 0.4;
+  let current = sections[0];
+  for (const section of sections) if (section.getBoundingClientRect().top <= line) current = section;
+  return current;
+}
 
-  app.dataset.section = current;
-  for (const view of document.querySelectorAll('.view')) {
-    const active = view.dataset.view === current;
-    view.hidden = !active;
-    if (active) view.scrollTop = 0;
+function updateOnScroll() {
+  // Hello parallax: 0 at the top of the page, 1 once Hello has scrolled fully away.
+  if (!reduceMotion) {
+    const progress = Math.min(window.scrollY / hello.offsetHeight, 1);
+    hello.style.setProperty('--p', progress.toFixed(3));
   }
-  for (const link of document.querySelectorAll('.top-nav a, .tabbar a')) {
-    if (link.getAttribute('href') === `#${current}`) link.setAttribute('aria-current', 'page');
+
+  // The top bar is see-through only at the very top; once anything scrolls under it, it turns solid.
+  app.classList.toggle('at-top', window.scrollY < 8);
+
+  const current = currentSection().id;
+  app.dataset.section = current;
+  for (const link of navLinks) {
+    if (link.getAttribute('href') === `#${current}`) link.setAttribute('aria-current', 'location');
     else link.removeAttribute('aria-current');
   }
+}
+
+// ---------- On-scroll reveal ----------
+
+// Numbers reveal items so they rise one after another, starting at `first`.
+// Lists rendered by a tab start at 2, so they follow the section heading and tabs.
+function setRevealOrder(container, first = 0) {
+  container.querySelectorAll(REVEAL_ITEMS).forEach((item, index) => item.style.setProperty('--i', first + index));
+}
+
+function setupReveal() {
+  if (reduceMotion) return;
+  for (const section of sections) setRevealOrder(section);
+  app.classList.add('reveal-ready');
+
+  // A section is revealed once, when its top comes within the lower fifth of the screen.
+  const observer = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
+      entry.target.classList.add('in-view');
+      observer.unobserve(entry.target);
+    }
+  }, { rootMargin: '0px 0px -20% 0px' });
+  for (const section of sections) observer.observe(section);
 }
 
 // ---------- Theme ----------
@@ -82,7 +130,7 @@ function setupThemeToggle() {
   });
 }
 
-// ---------- Tabs (Work and Music) ----------
+// ---------- Tabs (Projects and Music) ----------
 
 // Wires a [data-tabs] group: marks the chosen button selected and calls onSelect(key).
 function setupTabs(name, initialKey, onSelect) {
@@ -96,11 +144,11 @@ function setupTabs(name, initialKey, onSelect) {
   return buttons;
 }
 
-// ---------- Work ----------
+// ---------- Personal projects ----------
 
 function projectCard(project) {
   const card = el('article', { className: 'card' }, [
-    el('div', { className: 'card-tag' }, [icon(project.icon, 13), document.createTextNode(project.tag)]),
+    el('div', { className: 'card-tag' }, [icon(project.icon, 14), document.createTextNode(project.tag)]),
     el('h3', { text: project.title }),
     el('p', { text: project.body }),
   ]);
@@ -114,10 +162,13 @@ function projectCard(project) {
   return card;
 }
 
-function setupWork(projects) {
-  const list = document.getElementById('work-list');
-  const buttons = setupTabs('work', 'built', (status) => {
+// Built / In progress / Upcoming tabs over the project cards.
+function setupProjects(projects) {
+  const list = document.getElementById('project-list');
+  document.getElementById('project-total').textContent = `${projects.length} projects`;
+  const buttons = setupTabs('projects', 'built', (status) => {
     list.replaceChildren(...projects.filter((p) => p.status === status).map(projectCard));
+    setRevealOrder(list, 2);
   });
   for (const button of buttons) {
     button.querySelector('.count').textContent = projects.filter((p) => p.status === button.dataset.key).length;
@@ -150,13 +201,17 @@ function setupMusic(music) {
   const list = document.getElementById('music-list');
   const note = document.getElementById('music-note');
   setupTabs('music', 'recommendations', (key) => {
-    note.textContent = MUSIC_NOTES[key];
+    note.replaceChildren(MUSIC_NOTES[key]);
+    if (SPOTIFY_TABS.includes(key)) {
+      note.append(' · refreshed weekly by my ', el('a', { text: 'Spotify MCP server', attrs: { href: MCP_SERVER_URL } }));
+    }
     if (key === 'recommendations') {
       list.replaceChildren(el('div', { className: 'recs' }, music.recommendations.map(recommendationCard)));
     } else {
       const rows = el('div', { className: key === 'current' ? 'rows single' : 'rows' }, music[key].map(artistRow));
       list.replaceChildren(rows);
     }
+    setRevealOrder(list, 2);
   });
 }
 
@@ -175,9 +230,11 @@ function showLoadError(containerId) {
 
 // ---------- Start ----------
 
-showSection();
-window.addEventListener('hashchange', showSection);
+setupReveal();
+updateOnScroll();
+window.addEventListener('scroll', updateOnScroll, { passive: true });
+window.addEventListener('resize', updateOnScroll);
 setupThemeToggle();
 
-loadJson('data/projects.json').then(setupWork).catch(() => showLoadError('work-list'));
+loadJson('data/projects.json').then(setupProjects).catch(() => showLoadError('project-list'));
 loadJson('data/music.json').then(setupMusic).catch(() => showLoadError('music-list'));

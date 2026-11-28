@@ -1,8 +1,10 @@
 /*
   Atharv Bagade: personal site.
-  One screen, no page scroll. Monochrome theme with dark/light modes.
-  Desktop: section links top-right; Hello shows a tilted print over a blurred copy of the photo.
-  Phone (<= 720px): bottom tab bar; Hello shows the photo full-screen; each section scrolls inside the screen.
+  One scrolling page of full-screen sections that snap into place; each section fits one screen on desktop. Monochrome theme with dark/light modes.
+  A fixed top bar holds jump links to each section. Section content fades up as it arrives;
+  Hello drifts and fades as you scroll away from it.
+  Desktop: Hello shows a tilted print over a blurred copy of the photo.
+  Phone (<= 720px): the section links are hidden and Hello shows the photo full-screen.
 */
 
 /* ---------- Theme tokens ---------- */
@@ -30,6 +32,7 @@
   --font-mono: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
 
   --pad-x: 44px;
+  --bar-h: 84px; /* height of the fixed top bar; sections land just below it */
   /* Colours used on top of the photo (phone Hello). Overridden there. */
   --nav-ink: var(--ink);
   --nav-line: var(--line2);
@@ -56,7 +59,9 @@
 
 /* ---------- Base ---------- */
 *, *::before, *::after { box-sizing: border-box; }
-html, body { height: 100%; margin: 0; }
+/* Each section snaps to just below the fixed top bar. Sections taller than the screen still scroll freely. */
+html { scroll-behavior: smooth; scroll-snap-type: y mandatory; scroll-padding-top: var(--bar-h); }
+body { margin: 0; }
 body {
   background: var(--bg);
   color: var(--ink);
@@ -66,7 +71,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 a { color: var(--ink); }
-svg { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+svg { fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 :focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 [hidden] { display: none !important; }
 h1, h2, h3 { margin: 0; font-family: var(--font-display); font-weight: 500; text-wrap: balance; }
@@ -76,43 +81,38 @@ p { margin: 0; }
 ul, ol { margin: 0; padding: 0; list-style: none; }
 
 .eyebrow { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+.eyebrow a { color: inherit; text-underline-offset: 2px; }
+.eyebrow a:hover { color: var(--ink); }
 .muted { color: var(--muted); }
 .lead { font-family: var(--font-display); font-size: 20px; line-height: 1.35; }
 
-/* ---------- App shell: fills the screen, never scrolls ---------- */
-.app {
-  position: relative;
-  height: 100vh;
-  height: 100dvh;
-  min-height: 560px;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
 /* ---------- Hello backdrops ---------- */
-.backdrop { position: absolute; inset: 0; opacity: 0; transition: opacity .4s ease; pointer-events: none; }
+.backdrop { position: absolute; inset: 0; pointer-events: none; }
 .backdrop-ambient {
   inset: -120px;
   background: url('img/hero.jpg') 55% 35% / cover;
   filter: blur(70px) saturate(1.35);
 }
-.backdrop-veil { background: var(--veil); }
-.backdrop-photo { background: url('img/hero.jpg') 56% 28% / cover; }
+/* Fades into the page colour at the bottom so Hello flows into the next section. */
+.backdrop-veil { background: linear-gradient(to bottom, var(--veil) 70%, var(--bg)); }
+.backdrop-photo { background: url('img/hero.jpg') 56% 28% / cover; translate: 0 calc(var(--p) * 30%); }
 .backdrop-shade {
   background:
     linear-gradient(to top, rgba(0, 0, 0, .78) 0%, rgba(0, 0, 0, 0) 55%),
     linear-gradient(to bottom, rgba(0, 0, 0, .45) 0%, rgba(0, 0, 0, 0) 20%);
 }
-.app[data-section="hello"] .backdrop-ambient,
-.app[data-section="hello"] .backdrop-veil { opacity: 1; }
+.backdrop-photo, .backdrop-shade { display: none; }
 
-/* ---------- Top bar ---------- */
+/* ---------- Top bar: fixed; see-through at the top of the page, solid once scrolled ---------- */
 .topbar {
-  position: relative; z-index: 2;
+  position: fixed; top: 0; left: 0; right: 0; z-index: 10;
+  min-height: var(--bar-h);
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 24px;
   padding: 22px var(--pad-x);
+  background: var(--bg); border-bottom: 1px solid var(--line);
+  transition: background-color .2s ease, border-color .2s ease;
 }
+.app.at-top .topbar { background: transparent; border-bottom-color: transparent; }
 .name { font-family: var(--font-display); font-weight: 500; font-size: 19px; color: var(--nav-ink); text-decoration: none; white-space: nowrap; }
 .topbar-right { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 22px; }
 .top-nav { display: flex; flex-wrap: wrap; gap: 4px 22px; }
@@ -123,7 +123,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   border-bottom: 1px solid transparent;
 }
 .top-nav a:hover { opacity: 1; }
-.top-nav a[aria-current="page"] { opacity: 1; border-bottom-color: var(--nav-ink); }
+.top-nav a[aria-current] { opacity: 1; border-bottom-color: var(--nav-ink); }
 .theme-toggle {
   width: 36px; height: 36px; border-radius: 999px; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
@@ -131,22 +131,38 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 }
 :root[data-theme="dark"] .icon-moon, :root:not([data-theme="dark"]) .icon-sun { display: none; }
 
-/* ---------- Main area and views ---------- */
-main { position: relative; z-index: 1; flex: 1 1 0; min-height: 0; display: flex; }
-.view {
-  flex: 1 1 0; min-width: 0;
-  overflow-y: auto;
-  padding: 32px var(--pad-x);
-  animation: view-in .3s ease;
+/* ---------- Sections: each fills the screen below the top bar, content centred vertically ---------- */
+.page-section {
+  min-height: calc(100vh - var(--bar-h)); min-height: calc(100svh - var(--bar-h));
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 56px var(--pad-x);
+  scroll-snap-align: start;
 }
-.view > * + * { margin-top: 24px; }
-@keyframes view-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.page-section > * + * { margin-top: 24px; }
+/* Sections with tabs start at the top, so the heading stays put when a tab changes the content height. */
+.page-section:has([role="tablist"]) { justify-content: flex-start; }
 
-/* ---------- Hello ---------- */
-.view-hello { position: relative; overflow: hidden; padding: 0; }
+/* ---------- On-scroll reveal ----------
+   main.js adds .reveal-ready (skipped for reduced motion), gives each item its order in --i,
+   and marks a section .in-view when it scrolls into view. Uses `translate` so card hover (`transform`) still works. */
+.reveal-ready .page-section:not(.hello) :is(.section-head, .tabs-row, .entry, .card, .rec, .row, .stack > div, .contact-links li) { opacity: 0; }
+.reveal-ready .page-section.in-view :is(.section-head, .tabs-row, .entry, .card, .rec, .row, .stack > div, .contact-links li) {
+  animation: rise .6s cubic-bezier(.2, .7, .2, 1) both;
+  animation-delay: calc(min(var(--i, 0), 10) * 70ms);
+}
+@keyframes rise { from { opacity: 0; translate: 0 18px; } to { opacity: 1; translate: none; } }
+
+/* ---------- Hello: the full first screen ---------- */
+.hello {
+  --p: 0; /* how far Hello has scrolled away, 0 to 1; set by main.js and drives the parallax below */
+  display: block; position: relative; overflow: hidden; padding: 0;
+  height: 100vh; height: 100svh; min-height: 560px;
+}
+.hello > * + * { margin-top: 0; }
 .hero {
   position: absolute; left: var(--pad-x); right: 54%; bottom: 64px;
   display: flex; flex-direction: column; gap: 18px;
+  translate: 0 calc(var(--p) * -60px); opacity: calc(1 - var(--p) * 1.6);
 }
 .hero h1 { font-size: 56px; line-height: 1; letter-spacing: -0.025em; max-width: 13em; }
 .hero h1 em { font-style: italic; color: var(--ink); }
@@ -160,6 +176,7 @@ main { position: relative; z-index: 1; flex: 1 1 0; min-height: 0; display: flex
   background: #F4F1EA; padding: 14px 14px 54px;
   box-shadow: 0 24px 50px rgba(0, 0, 0, .35), 0 2px 6px rgba(0, 0, 0, .2);
   animation: print-in .6s ease;
+  translate: 0 calc(var(--p) * -140px); opacity: calc(1 - var(--p) * 1.2);
 }
 /* Its own keyframes: the shared view-in would replace the centring and tilt while it runs, then snap at the end. */
 @keyframes print-in {
@@ -167,58 +184,60 @@ main { position: relative; z-index: 1; flex: 1 1 0; min-height: 0; display: flex
   to { opacity: 1; transform: var(--print-centre) rotate(2deg); }
 }
 .print img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; object-position: 55% 30%; }
+.scroll-cue {
+  position: absolute; left: 50%; bottom: 22px; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 6px; min-height: 32px;
+  font-family: var(--font-ui); font-weight: 500; font-size: 13px;
+  color: var(--nav-ink); opacity: calc(.6 - var(--p) * 2); text-decoration: none;
+}
+.scroll-cue:hover { opacity: 1; }
 
 /* ---------- Section headers ---------- */
 .section-head { display: flex; flex-direction: column; gap: 4px; }
 .section-head.split { flex-direction: row; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px; }
-.section-head.with-cover { flex-direction: row; align-items: flex-end; gap: 20px; }
-.section-head.with-cover h2 { font-size: 52px; line-height: 1; }
-.cover {
-  flex: 0 0 120px; height: 120px; border-radius: 8px; background: var(--c3); color: var(--ink);
-  display: flex; align-items: center; justify-content: center;
-}
 .music-head { flex-direction: row; flex-wrap: wrap; align-items: stretch; gap: 20px 32px; }
 .music-head > div:last-child { flex: 1 1 320px; display: flex; flex-direction: column; justify-content: flex-end; gap: 8px; }
 .music-photo { flex: 0 0 168px; width: 168px; height: 224px; object-fit: cover; object-position: 40% 40%; border-radius: 8px; }
 
-/* ---------- Experience ---------- */
-.tracks { border-bottom: 1px solid var(--line); }
-.track {
-  display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 20px;
-  padding: 18px 12px; border-top: 1px solid var(--line); border-radius: 4px;
+/* ---------- Work and Education entries: date column, then the entry ---------- */
+.entries { border-bottom: 1px solid var(--line); }
+.entry {
+  display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 8px 32px;
+  padding: 24px 0; border-top: 1px solid var(--line);
 }
-.track:hover { background: var(--hover); }
-.track-no, .track-date { font-family: var(--font-mono); font-size: 13px; }
-.track-no { flex: 0 0 22px; }
-.track-date { color: var(--text2); }
-.track-body { flex: 1 1 380px; display: flex; flex-direction: column; gap: 6px; }
-.bullets { list-style: disc; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; color: var(--text2); max-width: 44em; }
-.chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.chips li { padding: 2px 10px; border: 1px solid var(--line2); border-radius: 999px; font-size: 12px; }
+.entry-date { display: flex; flex-direction: column; gap: 4px; padding-top: 6px; font-family: var(--font-mono); font-size: 13px; color: var(--text2); font-variant-numeric: tabular-nums; }
+.entry-body { display: flex; flex-direction: column; gap: 4px; max-width: 760px; }
+.entry-body .bullets { margin-top: 8px; }
+.entry-body .chips { margin-top: 16px; }
+.bullets { list-style: disc; padding-left: 20px; display: flex; flex-direction: column; gap: 8px; color: var(--text2); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chips li { padding: 2px 8px; border: 1px solid var(--line2); border-radius: 6px; font-family: var(--font-mono); font-size: 12px; color: var(--text2); }
 
-/* ---------- Tabs (Work and Music) ---------- */
-.tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+/* ---------- Tabs (Projects and Music) ---------- */
+.tabs { display: flex; flex-wrap: wrap; gap: 8px; }
 .tabs button {
   display: flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 16px; cursor: pointer;
-  border: 1px solid var(--line2); border-radius: 999px; background: transparent; color: var(--ink);
+  border: 1px solid var(--line2); border-radius: 20px; background: transparent; color: var(--ink);
   font-family: var(--font-ui); font-weight: 500; font-size: 14px; white-space: nowrap;
+  transition: background-color .15s ease, border-color .15s ease, color .15s ease;
 }
+.tabs button:hover { border-color: var(--ink); }
 .tabs button[aria-selected="true"] { background: var(--ink); border-color: var(--ink); color: var(--on-ink); }
 .tabs .count { font-family: var(--font-mono); font-size: 12px; opacity: .7; }
-.tabs-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; }
+.tabs-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; }
 
-/* ---------- Work cards ---------- */
-.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 16px; }
+/* ---------- Project cards: two columns, so a status tab never runs past one screen ---------- */
+.cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
 .card {
-  display: flex; flex-direction: column; gap: 10px; padding: 22px;
-  background: var(--card); border: 1px solid var(--line2); border-radius: 10px;
-  transition: transform .15s ease, border-color .15s ease;
+  display: flex; flex-direction: column; gap: 12px; padding: 24px;
+  background: var(--card); border: 1px solid var(--line2); border-radius: 12px;
+  transition: border-color .15s ease;
 }
-.card:hover { transform: translateY(-2px); border-color: var(--ink); }
-.card-tag { display: flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+.card:hover { border-color: var(--ink); }
+.card-tag { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
 .card h3 { font-size: 28px; letter-spacing: -0.01em; }
 .card p { color: var(--text3); }
-.card-link { margin-top: auto; display: flex; align-items: center; gap: 6px; min-height: 32px; font-family: var(--font-mono); font-size: 13px; }
+.card-link { margin-top: auto; display: flex; align-items: center; gap: 8px; min-height: 32px; font-family: var(--font-mono); font-size: 13px; }
 
 /* ---------- Music lists ---------- */
 .rows { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 0 28px; }
@@ -255,14 +274,21 @@ main { position: relative; z-index: 1; flex: 1 1 0; min-height: 0; display: flex
 }
 .contact-links a:hover { background: var(--hover); }
 
-/* ---------- Phone tab bar (hidden on larger screens) ---------- */
-.tabbar { display: none; }
-
 /* ---------- Tablet ---------- */
 @media (max-width: 1024px) {
   .hero { right: 50%; }
   .hero h1 { font-size: 46px; }
   .print { width: min(44%, 460px); }
+  .top-nav { column-gap: 16px; }
+  .entry { grid-template-columns: 160px minmax(0, 1fr); gap: 8px 24px; }
+}
+
+/* ---------- Short screens: tighten so Work still fits one screen ---------- */
+@media (max-height: 820px) and (min-width: 721px) {
+  .page-section { padding-top: 32px; padding-bottom: 32px; }
+  h2 { font-size: 40px; }
+  .entry { padding: 16px 0; }
+  .bullets { gap: 4px; }
 }
 
 /* ---------- Portrait tablets: photo centred in the upper part, title full width below ---------- */
@@ -272,55 +298,38 @@ main { position: relative; z-index: 1; flex: 1 1 0; min-height: 0; display: flex
     left: 50%; right: auto; top: 40%;
     width: min(64%, 560px);
   }
-  .hero { right: var(--pad-x); bottom: 56px; }
+  .hero { right: var(--pad-x); bottom: 80px; }
   .hero h1 { font-size: 56px; max-width: 14em; }
 }
 
 /* ---------- Phone ---------- */
 @media (max-width: 720px) {
-  :root { --pad-x: 20px; }
+  :root { --pad-x: 20px; --bar-h: 64px; }
   .topbar { padding: 14px var(--pad-x); }
   .top-nav { display: none; }
-  .view { padding: 20px var(--pad-x) 28px; }
-  h2, .section-head.with-cover h2 { font-size: 36px; }
-  .cover { flex-basis: 72px; height: 72px; }
-  .cover svg { width: 32px; height: 32px; }
+  .page-section { padding: 44px var(--pad-x); }
+  h2 { font-size: 36px; }
+  .entry { grid-template-columns: minmax(0, 1fr); padding: 20px 0; }
+  .entry-date { padding-top: 0; }
+  .cards { grid-template-columns: minmax(0, 1fr); }
 
   /* Hello: photo full-screen, light text over it */
   .print { display: none; }
-  .app[data-section="hello"] .backdrop-ambient,
-  .app[data-section="hello"] .backdrop-veil { opacity: 0; }
-  .app[data-section="hello"] .backdrop-photo,
-  .app[data-section="hello"] .backdrop-shade { opacity: 1; }
-  .app[data-section="hello"] { --nav-ink: #F5F5F2; --nav-line: rgba(245, 245, 242, .4); }
-  .hero { left: var(--pad-x); right: var(--pad-x); bottom: 32px; gap: 12px; }
+  .backdrop-ambient, .backdrop-veil { display: none; }
+  .backdrop-photo, .backdrop-shade { display: block; }
+  .app.at-top .topbar { --nav-ink: #F5F5F2; --nav-line: rgba(245, 245, 242, .4); }
+  .hello .scroll-cue { color: #F5F5F2; }
+  .hero { left: var(--pad-x); right: var(--pad-x); bottom: 72px; gap: 12px; }
   .hero h1 { font-size: 40px; max-width: none; }
   .hero p { font-size: 17px; color: rgba(245, 245, 242, .85); }
   .hero-muted { color: rgba(245, 245, 242, .7); }
   .hero h1 em { color: #F5F5F2; }
 
-  /* The tab bar stays dark over the Hello photo, so the theme toggle is hidden there. */
-  .app[data-section="hello"] .theme-toggle { display: none; }
-
-  .tabbar {
-    position: relative; z-index: 3; flex: 0 0 auto;
-    display: flex; justify-content: space-around;
-    padding: 6px 6px calc(6px + env(safe-area-inset-bottom));
-    background: var(--bg); border-top: 1px solid var(--line);
-  }
-  .app[data-section="hello"] .tabbar {
-    background: rgba(10, 10, 10, .35); border-top-color: rgba(245, 245, 242, .18);
-    -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
-  }
-  .tabbar a {
-    flex: 1 1 0; min-width: 0; min-height: 52px; padding: 4px 2px;
-    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
-    font-family: var(--font-ui); font-weight: 500; font-size: 11px; white-space: nowrap;
-    color: var(--nav-ink); opacity: .6; text-decoration: none;
-  }
-  .tabbar a[aria-current="page"] { opacity: 1; }
+  /* Over the Hello photo the top bar shows only the name. */
+  .app.at-top .theme-toggle { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
