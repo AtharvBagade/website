@@ -17,7 +17,7 @@ python3 -m http.server 8000
 
 | Path | What it holds |
 | --- | --- |
-| `index.html` | All markup: top bar and the five sections |
+| `index.html` | All markup: top bar and the four sections |
 | `styles.css` | Theme colours (light and dark), layout, tablet and phone breakpoints |
 | `main.js` | Highlighting the section in view, theme toggle, Work and Music tabs, rendering the lists |
 | `data/projects.json` | Work cards. `status` is `progress`, `upcoming` or `built` |
@@ -30,7 +30,7 @@ python3 -m http.server 8000
 
 - **Projects:** edit `data/projects.json`. Leave `url` empty to hide the link.
 - **Music:** edit `data/music.json`. Artist links are built from `spotifyArtistId`; a recommendation links to Spotify when `spotifyTrackId` is set, and an optional `note` adds a small line of context under it.
-- **Experience, stack and contact:** edit `index.html` directly.
+- **Experience (in Work), stack and contact:** edit `index.html` directly.
 
 ## Deploying
 

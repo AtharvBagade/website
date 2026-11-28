@@ -39,7 +39,6 @@
     <div class="topbar-right">
       <nav class="top-nav" aria-label="Sections">
         <a href="#hello">Hello</a>
-        <a href="#experience">Experience</a>
         <a href="#work">Work</a>
         <a href="#music">Music</a>
         <a href="#contact">Stack and contact</a>
@@ -66,83 +65,84 @@
         <h1><span class="hero-muted">Still a</span> <em>very curious kid…</em></h1>
         <p>I build software, chase songs and lose sleep over good books.</p>
       </div>
-      <a class="scroll-cue" href="#experience">Scroll
+      <a class="scroll-cue" href="#work">Scroll
         <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></a>
     </section>
 
-    <!-- Experience -->
-    <section id="experience" class="page-section" aria-labelledby="experience-title">
+    <!-- Work: the Experience tab is written here; Projects cards are rendered from data/projects.json -->
+    <section id="work" class="page-section" aria-labelledby="work-title">
       <div class="section-head with-cover">
         <div class="cover" aria-hidden="true">
           <svg width="48" height="48" viewBox="0 0 24 24"><path d="M5 7h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2zM8 7V5h8v2"/></svg>
         </div>
         <div>
           <p class="eyebrow">EP · side A</p>
-          <h2 id="experience-title">Experience</h2>
-          <p class="muted">Xook · 2022 to now · 4 tracks</p>
-        </div>
-      </div>
-
-      <ol class="tracks">
-        <li class="track">
-          <span class="track-no">01</span>
-          <div class="track-body">
-            <h3>Software Engineer, Xook</h3>
-            <ul class="bullets">
-              <li>Architected the Node.js and MongoDB service layer, including internal and public APIs, custom CI/CD pipelines and Firebase role-based access control.</li>
-              <li>Built a distributed task scheduler for high volumes of time-sensitive HTTP callbacks, with automatic retries and horizontal scaling.</li>
-              <li>Owned a cross-platform React Native logistics app end to end and shipped it to iOS and Android, working with the product and operations teams to digitise field workflows.</li>
-              <li>Improved the Real-Time Visibility Dashboard and the Consumer Commerce app, from the React front end to backend performance.</li>
-            </ul>
-            <ul class="chips"><li>Node.js</li><li>MongoDB</li><li>React Native</li><li>React</li><li>CI/CD</li><li>Firebase RBAC</li></ul>
-          </div>
-          <span class="track-date">May 2023 – now</span>
-        </li>
-        <li class="track">
-          <span class="track-no">02</span>
-          <div class="track-body">
-            <h3>Software Engineering Intern, Xook</h3>
-            <ul class="bullets">
-              <li>Built the front end of the Consumer Commerce ordering app and tuned its client-side performance and state management.</li>
-              <li>Created the Real-Time Visibility Dashboard, a React view of live health and performance metrics for every connected machine, which helped the operations team respond to incidents faster.</li>
-            </ul>
-            <ul class="chips"><li>React</li><li>Data visualisation</li></ul>
-          </div>
-          <span class="track-date">May 2022 – May 2023</span>
-        </li>
-        <li class="track">
-          <span class="track-no">03</span>
-          <div class="track-body">
-            <h3>Master of Computer Applications (MCA)</h3>
-            <p class="muted">Vishwakarma Institute of Technology, Pune</p>
-          </div>
-          <span class="track-date">May 2023</span>
-        </li>
-        <li class="track">
-          <span class="track-no">04</span>
-          <div class="track-body">
-            <h3>Bachelor of Computer Applications (BCA)</h3>
-            <p class="muted">Modern College of Arts, Science and Commerce, Pune</p>
-          </div>
-          <span class="track-date">July 2021</span>
-        </li>
-      </ol>
-    </section>
-
-    <!-- Work: cards are rendered from data/projects.json -->
-    <section id="work" class="page-section" aria-labelledby="work-title">
-      <div class="section-head split">
-        <div>
-          <p class="eyebrow">personal projects</p>
           <h2 id="work-title">Work</h2>
         </div>
-        <div class="tabs" role="tablist" aria-label="Project status" data-tabs="work">
-          <button type="button" role="tab" data-key="built">Built <span class="count"></span></button>
-          <button type="button" role="tab" data-key="progress">In progress <span class="count"></span></button>
-          <button type="button" role="tab" data-key="upcoming">Upcoming <span class="count"></span></button>
-        </div>
       </div>
-      <div class="cards" id="work-list" role="tabpanel"></div>
+      <div class="tabs-row">
+        <div class="tabs" role="tablist" aria-label="Work" data-tabs="work">
+          <button type="button" role="tab" data-key="experience" aria-controls="work-experience">Experience</button>
+          <button type="button" role="tab" data-key="projects" aria-controls="work-projects">Projects <span class="count" id="project-count"></span></button>
+        </div>
+        <p class="eyebrow" id="work-note"></p>
+      </div>
+
+      <div id="work-experience" role="tabpanel">
+        <ol class="tracks">
+          <li class="track">
+            <span class="track-no">01</span>
+            <div class="track-body">
+              <h3>Software Engineer, Xook</h3>
+              <ul class="bullets">
+                <li>Architected the Node.js and MongoDB service layer, including internal and public APIs, custom CI/CD pipelines and Firebase role-based access control.</li>
+                <li>Built a distributed task scheduler for high volumes of time-sensitive HTTP callbacks, with automatic retries and horizontal scaling.</li>
+                <li>Owned a cross-platform React Native logistics app end to end and shipped it to iOS and Android, working with the product and operations teams to digitise field workflows.</li>
+                <li>Improved the Real-Time Visibility Dashboard and the Consumer Commerce app, from the React front end to backend performance.</li>
+              </ul>
+              <ul class="chips"><li>Node.js</li><li>MongoDB</li><li>React Native</li><li>React</li><li>CI/CD</li><li>Firebase RBAC</li></ul>
+            </div>
+            <span class="track-date">May 2023 – now</span>
+          </li>
+          <li class="track">
+            <span class="track-no">02</span>
+            <div class="track-body">
+              <h3>Software Engineering Intern, Xook</h3>
+              <ul class="bullets">
+                <li>Built the front end of the Consumer Commerce ordering app and tuned its client-side performance and state management.</li>
+                <li>Created the Real-Time Visibility Dashboard, a React view of live health and performance metrics for every connected machine, which helped the operations team respond to incidents faster.</li>
+              </ul>
+              <ul class="chips"><li>React</li><li>Data visualisation</li></ul>
+            </div>
+            <span class="track-date">May 2022 – May 2023</span>
+          </li>
+          <li class="track">
+            <span class="track-no">03</span>
+            <div class="track-body">
+              <h3>Master of Computer Applications (MCA)</h3>
+              <p class="muted">Vishwakarma Institute of Technology, Pune</p>
+            </div>
+            <span class="track-date">May 2023</span>
+          </li>
+          <li class="track">
+            <span class="track-no">04</span>
+            <div class="track-body">
+              <h3>Bachelor of Computer Applications (BCA)</h3>
+              <p class="muted">Modern College of Arts, Science and Commerce, Pune</p>
+            </div>
+            <span class="track-date">July 2021</span>
+          </li>
+        </ol>
+      </div>
+
+      <div id="work-projects" class="projects" role="tabpanel" hidden>
+        <div class="filters" role="group" aria-label="Project status">
+          <button type="button" data-status="built">Built <span class="count"></span></button>
+          <button type="button" data-status="progress">In progress <span class="count"></span></button>
+          <button type="button" data-status="upcoming">Upcoming <span class="count"></span></button>
+        </div>
+        <div class="cards" id="work-list"></div>
+      </div>
     </section>
 
     <!-- Music: lists are rendered from data/music.json -->

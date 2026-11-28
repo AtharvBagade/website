@@ -137,12 +137,14 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   scroll-snap-align: start;
 }
 .page-section > * + * { margin-top: 24px; }
+/* Sections with tabs start at the top, so the heading stays put when a tab changes the content height. */
+.page-section:has([role="tablist"]) { justify-content: flex-start; }
 
 /* ---------- On-scroll reveal ----------
    main.js adds .reveal-ready (skipped for reduced motion), gives each item its order in --i,
    and marks a section .in-view when it scrolls into view. Uses `translate` so card hover (`transform`) still works. */
-.reveal-ready .page-section:not(.hello) :is(.section-head, .tabs-row, .track, .card, .rec, .row, .stack > div, .contact-links li) { opacity: 0; }
-.reveal-ready .page-section.in-view :is(.section-head, .tabs-row, .track, .card, .rec, .row, .stack > div, .contact-links li) {
+.reveal-ready .page-section:not(.hello) :is(.section-head, .tabs-row, .filters, .track, .card, .rec, .row, .stack > div, .contact-links li) { opacity: 0; }
+.reveal-ready .page-section.in-view :is(.section-head, .tabs-row, .filters, .track, .card, .rec, .row, .stack > div, .contact-links li) {
   animation: rise .6s cubic-bezier(.2, .7, .2, 1) both;
   animation-delay: calc(min(var(--i, 0), 10) * 70ms);
 }
@@ -226,6 +228,17 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .tabs button[aria-selected="true"] { background: var(--ink); border-color: var(--ink); color: var(--on-ink); }
 .tabs .count { font-family: var(--font-mono); font-size: 12px; opacity: .7; }
 .tabs-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; }
+
+/* ---------- Project status filter, inside Work's Projects tab ---------- */
+.projects { display: flex; flex-direction: column; gap: 18px; }
+.filters { display: flex; flex-wrap: wrap; gap: 4px 22px; border-bottom: 1px solid var(--line); }
+.filters button {
+  display: flex; align-items: center; gap: 6px; min-height: 44px; margin-bottom: -1px; padding: 0; cursor: pointer;
+  border: 0; border-bottom: 1px solid transparent; background: transparent; color: var(--ink); opacity: .62;
+  font-family: var(--font-ui); font-weight: 500; font-size: 14px; white-space: nowrap;
+}
+.filters button[aria-pressed="true"] { opacity: 1; border-bottom-color: var(--ink); }
+.filters .count { font-family: var(--font-mono); font-size: 12px; opacity: .7; }
 
 /* ---------- Work cards ---------- */
 .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 16px; }
