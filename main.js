@@ -60,11 +60,12 @@ const initials = (name) => name.split(/\s+/).slice(0, 2).map((word) => word[0]).
 
 // ---------- Sections ----------
 
+const atBottom = () => window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+
 // The current section is the last one whose top has passed 40% of the way down the screen,
 // or the last section once the page is scrolled to the bottom (Contact is too short to get there).
 function currentSection() {
-  const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
-  if (atBottom) return sections[sections.length - 1];
+  if (atBottom()) return sections[sections.length - 1];
   const line = window.innerHeight * 0.4;
   let current = sections[0];
   for (const section of sections) if (section.getBoundingClientRect().top <= line) current = section;
@@ -80,6 +81,8 @@ function updateOnScroll() {
 
   // The top bar is see-through only at the very top; once anything scrolls under it, it turns solid.
   app.classList.toggle('at-top', window.scrollY < 8);
+  // The back-to-top button appears once the page reaches the end.
+  app.classList.toggle('at-end', atBottom());
 
   const current = currentSection().id;
   app.dataset.section = current;
@@ -111,6 +114,17 @@ function setupReveal() {
     }
   }, { rootMargin: '0px 0px -20% 0px' });
   for (const section of sections) observer.observe(section);
+}
+
+// ---------- Back to top ----------
+
+// Scrolls smoothly to the top (instantly for reduced motion), then moves focus to the name so keyboard
+// users aren't left on the button as it hides.
+function setupBackToTop() {
+  document.querySelector('.to-top').addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+    document.querySelector('.name').focus({ preventScroll: true });
+  });
 }
 
 // ---------- Theme ----------
@@ -235,6 +249,7 @@ updateOnScroll();
 window.addEventListener('scroll', updateOnScroll, { passive: true });
 window.addEventListener('resize', updateOnScroll);
 setupThemeToggle();
+setupBackToTop();
 
 loadJson('data/projects.json').then(setupProjects).catch(() => showLoadError('project-list'));
 loadJson('data/music.json').then(setupMusic).catch(() => showLoadError('music-list'));
