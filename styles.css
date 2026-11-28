@@ -1,6 +1,6 @@
 /*
   Atharv Bagade: personal site.
-  One scrolling page of full-screen sections that snap into place. Monochrome theme with dark/light modes.
+  One scrolling page of full-screen sections that snap into place; each section fits one screen on desktop. Monochrome theme with dark/light modes.
   A fixed top bar holds jump links to each section. Section content fades up as it arrives;
   Hello drifts and fades as you scroll away from it.
   Desktop: Hello shows a tilted print over a blurred copy of the photo.
@@ -71,7 +71,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 a { color: var(--ink); }
-svg { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+svg { fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 :focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 [hidden] { display: none !important; }
 h1, h2, h3 { margin: 0; font-family: var(--font-display); font-weight: 500; text-wrap: balance; }
@@ -81,6 +81,8 @@ p { margin: 0; }
 ul, ol { margin: 0; padding: 0; list-style: none; }
 
 .eyebrow { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+.eyebrow a { color: inherit; text-underline-offset: 2px; }
+.eyebrow a:hover { color: var(--ink); }
 .muted { color: var(--muted); }
 .lead { font-family: var(--font-display); font-size: 20px; line-height: 1.35; }
 
@@ -143,8 +145,8 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 /* ---------- On-scroll reveal ----------
    main.js adds .reveal-ready (skipped for reduced motion), gives each item its order in --i,
    and marks a section .in-view when it scrolls into view. Uses `translate` so card hover (`transform`) still works. */
-.reveal-ready .page-section:not(.hello) :is(.section-head, .tabs-row, .filters, .track, .card, .rec, .row, .stack > div, .contact-links li) { opacity: 0; }
-.reveal-ready .page-section.in-view :is(.section-head, .tabs-row, .filters, .track, .card, .rec, .row, .stack > div, .contact-links li) {
+.reveal-ready .page-section:not(.hello) :is(.section-head, .tabs-row, .entry, .card, .rec, .row, .stack > div, .contact-links li) { opacity: 0; }
+.reveal-ready .page-section.in-view :is(.section-head, .tabs-row, .entry, .card, .rec, .row, .stack > div, .contact-links li) {
   animation: rise .6s cubic-bezier(.2, .7, .2, 1) both;
   animation-delay: calc(min(var(--i, 0), 10) * 70ms);
 }
@@ -193,65 +195,49 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 /* ---------- Section headers ---------- */
 .section-head { display: flex; flex-direction: column; gap: 4px; }
 .section-head.split { flex-direction: row; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px; }
-.section-head.with-cover { flex-direction: row; align-items: flex-end; gap: 20px; }
-.section-head.with-cover h2 { font-size: 52px; line-height: 1; }
-.cover {
-  flex: 0 0 120px; height: 120px; border-radius: 8px; background: var(--c3); color: var(--ink);
-  display: flex; align-items: center; justify-content: center;
-}
 .music-head { flex-direction: row; flex-wrap: wrap; align-items: stretch; gap: 20px 32px; }
 .music-head > div:last-child { flex: 1 1 320px; display: flex; flex-direction: column; justify-content: flex-end; gap: 8px; }
 .music-photo { flex: 0 0 168px; width: 168px; height: 224px; object-fit: cover; object-position: 40% 40%; border-radius: 8px; }
 
-/* ---------- Experience ---------- */
-.tracks { border-bottom: 1px solid var(--line); }
-.track {
-  display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 20px;
-  padding: 18px 12px; border-top: 1px solid var(--line); border-radius: 4px;
+/* ---------- Work and Education entries: date column, then the entry ---------- */
+.entries { border-bottom: 1px solid var(--line); }
+.entry {
+  display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 8px 32px;
+  padding: 24px 0; border-top: 1px solid var(--line);
 }
-.track:hover { background: var(--hover); }
-.track-no, .track-date { font-family: var(--font-mono); font-size: 13px; }
-.track-no { flex: 0 0 22px; }
-.track-date { color: var(--text2); }
-.track-body { flex: 1 1 380px; display: flex; flex-direction: column; gap: 6px; }
-.bullets { list-style: disc; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; color: var(--text2); max-width: 44em; }
-.chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.chips li { padding: 2px 10px; border: 1px solid var(--line2); border-radius: 999px; font-size: 12px; }
+.entry-date { display: flex; flex-direction: column; gap: 4px; padding-top: 6px; font-family: var(--font-mono); font-size: 13px; color: var(--text2); font-variant-numeric: tabular-nums; }
+.entry-body { display: flex; flex-direction: column; gap: 4px; max-width: 760px; }
+.entry-body .bullets { margin-top: 8px; }
+.entry-body .chips { margin-top: 16px; }
+.bullets { list-style: disc; padding-left: 20px; display: flex; flex-direction: column; gap: 8px; color: var(--text2); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chips li { padding: 2px 8px; border: 1px solid var(--line2); border-radius: 6px; font-family: var(--font-mono); font-size: 12px; color: var(--text2); }
 
-/* ---------- Tabs (Work and Music) ---------- */
-.tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+/* ---------- Tabs (Projects and Music) ---------- */
+.tabs { display: flex; flex-wrap: wrap; gap: 8px; }
 .tabs button {
   display: flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 16px; cursor: pointer;
-  border: 1px solid var(--line2); border-radius: 999px; background: transparent; color: var(--ink);
+  border: 1px solid var(--line2); border-radius: 20px; background: transparent; color: var(--ink);
   font-family: var(--font-ui); font-weight: 500; font-size: 14px; white-space: nowrap;
+  transition: background-color .15s ease, border-color .15s ease, color .15s ease;
 }
+.tabs button:hover { border-color: var(--ink); }
 .tabs button[aria-selected="true"] { background: var(--ink); border-color: var(--ink); color: var(--on-ink); }
 .tabs .count { font-family: var(--font-mono); font-size: 12px; opacity: .7; }
-.tabs-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; }
+.tabs-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; }
 
-/* ---------- Project status filter, inside Work's Projects tab ---------- */
-.projects { display: flex; flex-direction: column; gap: 18px; }
-.filters { display: flex; flex-wrap: wrap; gap: 4px 22px; border-bottom: 1px solid var(--line); }
-.filters button {
-  display: flex; align-items: center; gap: 6px; min-height: 44px; margin-bottom: -1px; padding: 0; cursor: pointer;
-  border: 0; border-bottom: 1px solid transparent; background: transparent; color: var(--ink); opacity: .62;
-  font-family: var(--font-ui); font-weight: 500; font-size: 14px; white-space: nowrap;
-}
-.filters button[aria-pressed="true"] { opacity: 1; border-bottom-color: var(--ink); }
-.filters .count { font-family: var(--font-mono); font-size: 12px; opacity: .7; }
-
-/* ---------- Work cards ---------- */
-.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 16px; }
+/* ---------- Project cards: two columns, so a status tab never runs past one screen ---------- */
+.cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
 .card {
-  display: flex; flex-direction: column; gap: 10px; padding: 22px;
-  background: var(--card); border: 1px solid var(--line2); border-radius: 10px;
-  transition: transform .15s ease, border-color .15s ease;
+  display: flex; flex-direction: column; gap: 12px; padding: 24px;
+  background: var(--card); border: 1px solid var(--line2); border-radius: 12px;
+  transition: border-color .15s ease;
 }
-.card:hover { transform: translateY(-2px); border-color: var(--ink); }
-.card-tag { display: flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+.card:hover { border-color: var(--ink); }
+.card-tag { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
 .card h3 { font-size: 28px; letter-spacing: -0.01em; }
 .card p { color: var(--text3); }
-.card-link { margin-top: auto; display: flex; align-items: center; gap: 6px; min-height: 32px; font-family: var(--font-mono); font-size: 13px; }
+.card-link { margin-top: auto; display: flex; align-items: center; gap: 8px; min-height: 32px; font-family: var(--font-mono); font-size: 13px; }
 
 /* ---------- Music lists ---------- */
 .rows { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 0 28px; }
@@ -293,6 +279,16 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   .hero { right: 50%; }
   .hero h1 { font-size: 46px; }
   .print { width: min(44%, 460px); }
+  .top-nav { column-gap: 16px; }
+  .entry { grid-template-columns: 160px minmax(0, 1fr); gap: 8px 24px; }
+}
+
+/* ---------- Short screens: tighten so Work still fits one screen ---------- */
+@media (max-height: 820px) and (min-width: 721px) {
+  .page-section { padding-top: 32px; padding-bottom: 32px; }
+  h2 { font-size: 40px; }
+  .entry { padding: 16px 0; }
+  .bullets { gap: 4px; }
 }
 
 /* ---------- Portrait tablets: photo centred in the upper part, title full width below ---------- */
@@ -312,9 +308,10 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   .topbar { padding: 14px var(--pad-x); }
   .top-nav { display: none; }
   .page-section { padding: 44px var(--pad-x); }
-  h2, .section-head.with-cover h2 { font-size: 36px; }
-  .cover { flex-basis: 72px; height: 72px; }
-  .cover svg { width: 32px; height: 32px; }
+  h2 { font-size: 36px; }
+  .entry { grid-template-columns: minmax(0, 1fr); padding: 20px 0; }
+  .entry-date { padding-top: 0; }
+  .cards { grid-template-columns: minmax(0, 1fr); }
 
   /* Hello: photo full-screen, light text over it */
   .print { display: none; }

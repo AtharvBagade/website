@@ -2,7 +2,7 @@
 // One scrolling page of full-screen sections: the top nav links jump to each section, and the link for the section
 // in view is marked current. Section content fades up when the section first scrolls into view, and Hello drifts
 // away as you scroll past it (both skipped when the visitor prefers reduced motion).
-// Work and Music lists come from data/*.json.
+// Project and Music lists come from data/*.json.
 
 const ICONS = {
   code: 'M8 6l-6 6 6 6M16 6l6 6-6 6',
@@ -11,16 +11,15 @@ const ICONS = {
   arrow: 'M7 17L17 7M9 7h8v8',
 };
 
-const WORK_NOTES = {
-  experience: 'Xook · 2022 to now · 4 tracks',
-  projects: 'personal projects',
-};
-
 const MUSIC_NOTES = {
   recommendations: 'songs I think you should hear',
   current: 'on repeat lately',
-  allTime: 'from my Spotify · all time',
+  allTime: 'all time',
 };
+
+// The Spotify tabs are refreshed weekly by the Spotify MCP server listed under Personal projects.
+const SPOTIFY_TABS = ['current', 'allTime'];
+const MCP_SERVER_URL = 'https://github.com/AtharvBagade/auxcord-mcp';
 
 const app = document.querySelector('.app');
 const sections = [...document.querySelectorAll('.page-section')];
@@ -29,7 +28,7 @@ const hello = document.getElementById('hello');
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // Items that fade up in each section, in the order they appear. Matches the selector list in styles.css.
-const REVEAL_ITEMS = '.section-head, .tabs-row, .filters, .track, .card, .rec, .row, .stack > div, .contact-links li';
+const REVEAL_ITEMS = '.section-head, .tabs-row, .entry, .card, .rec, .row, .stack > div, .contact-links li';
 
 // ---------- Small DOM helpers ----------
 
@@ -131,7 +130,7 @@ function setupThemeToggle() {
   });
 }
 
-// ---------- Tabs (Work and Music) ----------
+// ---------- Tabs (Projects and Music) ----------
 
 // Wires a [data-tabs] group: marks the chosen button selected and calls onSelect(key).
 function setupTabs(name, initialKey, onSelect) {
@@ -145,11 +144,11 @@ function setupTabs(name, initialKey, onSelect) {
   return buttons;
 }
 
-// ---------- Work ----------
+// ---------- Personal projects ----------
 
 function projectCard(project) {
   const card = el('article', { className: 'card' }, [
-    el('div', { className: 'card-tag' }, [icon(project.icon, 13), document.createTextNode(project.tag)]),
+    el('div', { className: 'card-tag' }, [icon(project.icon, 14), document.createTextNode(project.tag)]),
     el('h3', { text: project.title }),
     el('p', { text: project.body }),
   ]);
@@ -163,32 +162,17 @@ function projectCard(project) {
   return card;
 }
 
-// Experience and Projects tabs. Experience is written in index.html, so this runs before any data loads.
-function setupWorkTabs() {
-  const note = document.getElementById('work-note');
-  const panels = { experience: document.getElementById('work-experience'), projects: document.getElementById('work-projects') };
-  setupTabs('work', 'experience', (key) => {
-    note.textContent = WORK_NOTES[key];
-    for (const [name, panel] of Object.entries(panels)) panel.hidden = name !== key;
-  });
-}
-
-// The Projects tab: a Built / In progress / Upcoming filter over the cards.
+// Built / In progress / Upcoming tabs over the project cards.
 function setupProjects(projects) {
-  const panel = document.getElementById('work-projects');
-  const list = document.getElementById('work-list');
-  const buttons = [...panel.querySelectorAll('.filters button')];
-  const show = (status) => {
-    for (const button of buttons) button.setAttribute('aria-pressed', String(button.dataset.status === status));
+  const list = document.getElementById('project-list');
+  document.getElementById('project-total').textContent = `${projects.length} projects`;
+  const buttons = setupTabs('projects', 'built', (status) => {
     list.replaceChildren(...projects.filter((p) => p.status === status).map(projectCard));
-    setRevealOrder(panel, 2);
-  };
-  document.getElementById('project-count').textContent = projects.length;
+    setRevealOrder(list, 2);
+  });
   for (const button of buttons) {
-    button.querySelector('.count').textContent = projects.filter((p) => p.status === button.dataset.status).length;
-    button.addEventListener('click', () => show(button.dataset.status));
+    button.querySelector('.count').textContent = projects.filter((p) => p.status === button.dataset.key).length;
   }
-  show('built');
 }
 
 // ---------- Music ----------
@@ -217,7 +201,10 @@ function setupMusic(music) {
   const list = document.getElementById('music-list');
   const note = document.getElementById('music-note');
   setupTabs('music', 'recommendations', (key) => {
-    note.textContent = MUSIC_NOTES[key];
+    note.replaceChildren(MUSIC_NOTES[key]);
+    if (SPOTIFY_TABS.includes(key)) {
+      note.append(' · refreshed weekly by my ', el('a', { text: 'Spotify MCP server', attrs: { href: MCP_SERVER_URL } }));
+    }
     if (key === 'recommendations') {
       list.replaceChildren(el('div', { className: 'recs' }, music.recommendations.map(recommendationCard)));
     } else {
@@ -248,7 +235,6 @@ updateOnScroll();
 window.addEventListener('scroll', updateOnScroll, { passive: true });
 window.addEventListener('resize', updateOnScroll);
 setupThemeToggle();
-setupWorkTabs();
 
-loadJson('data/projects.json').then(setupProjects).catch(() => showLoadError('work-list'));
+loadJson('data/projects.json').then(setupProjects).catch(() => showLoadError('project-list'));
 loadJson('data/music.json').then(setupMusic).catch(() => showLoadError('music-list'));

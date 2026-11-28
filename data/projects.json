@@ -1,7 +1,7 @@
 [
   {
     "status": "progress",
-    "tag": "Python · in progress",
+    "tag": "Python",
     "icon": "code",
     "title": "changesRequested",
     "body": "A Python code-review CLI, run as chreq. RAG retrieves codebase context and a LangGraph agent reviews the change. The model comes from config: Claude, Gemini or a local ~30B model, compared in evals.",
@@ -10,7 +10,7 @@
   },
   {
     "status": "upcoming",
-    "tag": "Go · upcoming",
+    "tag": "Go",
     "icon": "code",
     "title": "Job queue from scratch",
     "body": "A job queue with a worker pool, built from first principles to learn Go concurrency.",
@@ -19,7 +19,7 @@
   },
   {
     "status": "built",
-    "tag": "MCP · built",
+    "tag": "MCP",
     "icon": "music",
     "title": "Spotify MCP server",
     "body": "Open-source MCP server that exposes the Spotify Web API to AI agents like Claude Desktop and Cursor. OAuth 2.0 PKCE with automatic token refresh, connection-pooled clients and a pytest suite.",
@@ -28,7 +28,7 @@
   },
   {
     "status": "built",
-    "tag": "Go · built",
+    "tag": "Go",
     "icon": "code",
     "title": "ndstats",
     "body": "A Go command-line tool that computes statistics over NDJSON streams.",
